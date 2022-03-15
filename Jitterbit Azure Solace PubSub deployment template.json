@@ -57,10 +57,7 @@
       "metadata": {
         "description": "Specify the type of access to the broker VMs for SSH and to the Load Balancer for broker services. 'Internal' will make them accessible only from the local virtual network"
       },
-      "allowedValues": [
-        "Internal",
-        "Public"
-      ]
+      "allowedValues": ["Internal", "Public"]
     },
     "dnsLabelForPublicLoadBalancer": {
       "type": "string",
@@ -82,9 +79,7 @@
       "metadata": {
         "description": "The CentOS version for deploying the Docker containers. This will pick a fully patched image of this given CentOS version. Allowed values: 7.9"
       },
-      "allowedValues": [
-        "7_9"
-      ]
+      "allowedValues": ["7_9"]
     },
     "maxNumberOfClientConnections": {
       "type": "string",
@@ -92,13 +87,7 @@
       "metadata": {
         "description": "Broker system scaling: the maximum supported number of client connections"
       },
-      "allowedValues": [
-        "100",
-        "1000",
-        "10000",
-        "100000",
-        "200000"
-      ]
+      "allowedValues": ["100", "1000", "10000", "100000", "200000"]
     },
     "maxNumberOfQueueMessages": {
       "type": "string",
@@ -106,11 +95,7 @@
       "metadata": {
         "description": "Broker system scaling: the maximum number of queue messages, in millions of messages"
       },
-      "allowedValues": [
-        "100",
-        "240",
-        "3000"
-      ]
+      "allowedValues": ["100", "240", "3000"]
     },
     "messageRoutingNodeVmSize": {
       "type": "string",
@@ -121,7 +106,7 @@
       "allowedValues": [
         "Standard_D1_v2",
         "Standard_D2_v2",
-	      "Standard_D2_v3",
+        "Standard_D2_v3",
         "Standard_D3_v2",
         "Standard_D4_v3",
         "Standard_DS1_v2",
@@ -137,8 +122,8 @@
       },
       "allowedValues": [
         "Standard_D1_v2",
-    	  "Standard_D2_v2",
-      	"Standard_D2_v3",
+        "Standard_D2_v2",
+        "Standard_D2_v3",
         "Standard_DS1_v2",
         "Standard_DS2_v2"
       ]
@@ -149,58 +134,54 @@
       "metadata": {
         "description": "Modified default, provisions a deicated data disk in event of disater recovery this can be attached to a new instance."
       },
-      "allowedValues": [
-        "0",
-        "8",
-        "16",
-        "32",
-        "64",
-        "128",
-        "256"
-      ]
+      "allowedValues": ["0", "8", "16", "32", "64", "128", "256"]
     },
     "brokerDockerImageReference": {
       "type": "string",
       "defaultValue": "solace/solace-pubsub-standard:latest",
       "metadata": {
-          "description": "Solace PubSub+ event broker docker image reference: a docker registry name with optional tag or a download URL. The download URL can be obtained from http://dev.solace.com/downloads/ or it can be a url to a remotely hosted load version. Default will use the latest image available from Docker Hub."
+        "description": "Solace PubSub+ event broker docker image reference: a docker registry name with optional tag or a download URL. The download URL can be obtained from http://dev.solace.com/downloads/ or it can be a url to a remotely hosted load version. Default will use the latest image available from Docker Hub."
       }
     },
     "deploymentModel": {
       "type": "string",
-	  "defaultValue": "HighAvailability",
+      "defaultValue": "HighAvailability",
       "metadata": {
         "description": "Modified default to deploy a three node HA cluster"
       },
-      "allowedValues": [
-        "HighAvailability",
-        "SingleNode"
-      ]
+      "allowedValues": ["HighAvailability", "SingleNode"]
+    },
+    "virtualNetworkResourceGroup": {
+      "type": "string",
+      "defaultValue": "ILGRecoveryServices",
+      "metadata": {
+        "description": "Resource Group VNET is deployed in"
+      }
     },
     "existingVirtualNetworkName": {
       "type": "string",
-      "defaultValue": "",
+      "defaultValue": "ilgazurevnet",
       "metadata": {
         "description": "Optional: Only used if deploying into an existing virtual network and subnet. Specify the Existing Virtual Network Name together with the Existing Subnet Name, otherwise leave it at default blank."
       }
     },
     "existingSubnetName": {
       "type": "string",
-      "defaultValue": "",
+      "defaultValue": "AzureInfrastructure",
       "metadata": {
         "description": "Optional: Only used if deploying into an existing virtual network and subnet. Specify the Existing Virtual Network Name together with the Existing Subnet Name, otherwise leave it at default blank."
       }
     },
     "vnetAddressPrefix": {
       "type": "string",
-      "defaultValue": "10.0.0.0/16",
+      "defaultValue": "10.20.100.0/22",
       "metadata": {
         "description": "The virtual network's address range in CIDR notation where the PubSub+ event broker will be deployed."
       }
     },
     "subnetPrefix": {
       "type": "string",
-      "defaultValue": "10.0.0.0/24",
+      "defaultValue": "10.20.103.0/24",
       "metadata": {
         "description": "The subnet's address range in CIDR notation where the PubSub+ event broker will be deployed. It must be contained by the address space of the virtual network. The address range of a subnet which is in use can't be edited."
       }
@@ -214,7 +195,7 @@
     },
     "numberOfFaultDomains": {
       "type": "int",
-      "defaultValue": 3,
+      "defaultValue": 2,
       "metadata": {
         "description": "The number of fault domains to be used for the deployment. For the maximum number fault domains available to your location refer to https://github.com/MicrosoftDocs/azure-docs/blob/master/includes/managed-disks-common-fault-domain-region-list.md"
       }
@@ -224,7 +205,7 @@
       "metadata": {
         "description": "The base URI where artifacts required by this template are located."
       },
-      "defaultValue": "[deployment().properties.templatelink.uri]"
+      "defaultValue": "https://raw.githubusercontent.com/Jitterbit-EMEA/jb-pubsubplus-azure-quickstart-template/main/"
     },
     "_artifactsLocationSasToken": {
       "type": "securestring",
@@ -266,10 +247,11 @@
     "nicName": "Nicd",
     "deploymentModelHighAvailability": { "numberOfNodes": 3 },
     "deploymentModelSingleNode": { "numberOfNodes": 1 },
-    "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]",
+    "subnetRef": "[resourceId(parameters('virtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]",
     "numberOfInstances": "[variables(concat('deploymentModel', parameters('deploymentModel'))).numberOfNodes]",
     "monitorNodeIndex": 2,
-    "lbName" : "solace-ha-group-loadbalancer",
+    "lbName": "solace-ha-group-loadbalancer",
+    "lbSkuName": "Standard",
     "lbPoolName": "solace-ha-group",
     "lbPoolID": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', variables('lbName'), variables('lbPoolName'))]",
     "dataDisksChoices": {
@@ -297,10 +279,10 @@
           }
         }
       ],
-      "2": [ ]
+      "2": []
     },
-    "adminPasswordDir" : "/mnt/resource/secrets",
-    "adminPasswordFile" : "[concat(variables('adminPasswordDir'),'/solOSpasswd')]"
+    "adminPasswordDir": "/mnt/resource/secrets",
+    "adminPasswordFile": "[concat(variables('adminPasswordDir'),'/solOSpasswd')]"
   },
   "resources": [
     {
@@ -355,6 +337,9 @@
           "lbPoolName": {
             "value": "[variables('lbPoolName')]"
           },
+          "lbSkuName": {
+            "name": "[variables('lbSkuName')]"
+          },
           "subnetRef": {
             "value": "[variables('subnetRef')]"
           },
@@ -391,6 +376,9 @@
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "[concat(variables('publicIPAddressNameVM'), copyindex())]",
       "location": "[parameters('location')]",
+      "sku": {
+        "name": "[variables('lbSkuName')]"
+      },
       "copy": {
         "name": "interfaceLoop",
         "count": "[variables('numberOfInstances')]"
@@ -410,9 +398,7 @@
       "location": "[parameters('location')]",
       "properties": {
         "addressSpace": {
-          "addressPrefixes": [
-            "[parameters('vnetAddressPrefix')]"
-          ]
+          "addressPrefixes": ["[parameters('vnetAddressPrefix')]"]
         },
         "subnets": [
           {
@@ -540,14 +526,14 @@
       "location": "[parameters('location')]",
       "sku": {
         "name": "Aligned"
-        },
+      },
       "properties": {
         "platformFaultDomainCount": "[variables('platformFaultDomainCount')]",
         "platformUpdateDomainCount": "[variables('platformUpdateDomainCount')]"
       }
     },
     {
-      "apiVersion":"2021-07-01",
+      "apiVersion": "2021-07-01",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[concat(parameters('dnsLabelForVmIp'), copyindex())]",
       "location": "[parameters('location')]",
@@ -670,4 +656,3 @@
     }
   ]
 }
-
