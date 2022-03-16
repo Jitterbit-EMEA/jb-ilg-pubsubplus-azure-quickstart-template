@@ -52,7 +52,7 @@ The Docker image reference can be:
 
 Hit the "Deploy to Azure" button, and in the deployment template add the link to the Solace PubSub+ software event broker. 
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FJitterbit-EMEA%2Fjb-pubsubplus-azure-quickstart-template%2Fmain%2Fazuredeploy.json.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FJitterbit-EMEA%2Fjb-pubsubplus-azure-quickstart-template%2Fmain%2Fazuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
 </a>
 <a href="http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FJitterbit-EMEA%2Fjb-pubsubplus-azure-quickstart-template%2Fmain%2Fazuredeploy.json" target="_blank">
