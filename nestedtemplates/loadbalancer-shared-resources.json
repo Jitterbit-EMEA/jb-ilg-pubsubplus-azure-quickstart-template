@@ -65,7 +65,8 @@
     "lbProbeID": "[resourceId('Microsoft.Network/loadBalancers/probes',parameters('lbName'),variables('lbProbeName'))]",
     "publicIPAddressJSON": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddressNameLB'))]" },
     "subnetJSON": { "id": "[parameters('subnetRef')]" },
-    "lbSkuName": "Standard"
+    "lbSkuName": "Standard",
+    "lbSkuTier": "Regional"
   },
   "resources": [
     {
@@ -85,7 +86,10 @@
       "apiVersion": "2020-04-01",
       "type": "Microsoft.Network/loadBalancers",
       "name": "[parameters('lbName')]",
-      "sku": "[variables('lbSkuName')]",
+      "sku": {
+        "name": "[variables('lbSkuName')]",
+        "tier": "[variables('lbSkuTier')]"
+      },
       "location": "[parameters('location')]",
       "dependsOn": [
         "[concat('Microsoft.Network/publicIPAddresses/', parameters('publicIPAddressNameLB'))]"
