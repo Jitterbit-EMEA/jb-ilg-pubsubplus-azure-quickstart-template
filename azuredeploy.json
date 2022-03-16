@@ -53,11 +53,14 @@
     },
     "vmAndLoadbalancerExposure": {
       "type": "string",
-      "defaultValue": "Internal",
+      "defaultValue": "Public",
       "metadata": {
         "description": "Specify the type of access to the broker VMs for SSH and to the Load Balancer for broker services. 'Internal' will make them accessible only from the local virtual network"
       },
-      "allowedValues": ["Internal", "Public"]
+      "allowedValues": [
+        "Internal",
+        "Public"
+      ]
     },
     "dnsLabelForPublicLoadBalancer": {
       "type": "string",
@@ -79,7 +82,9 @@
       "metadata": {
         "description": "The CentOS version for deploying the Docker containers. This will pick a fully patched image of this given CentOS version. Allowed values: 7.9"
       },
-      "allowedValues": ["7_9"]
+      "allowedValues": [
+        "7_9"
+      ]
     },
     "maxNumberOfClientConnections": {
       "type": "string",
@@ -87,7 +92,13 @@
       "metadata": {
         "description": "Broker system scaling: the maximum supported number of client connections"
       },
-      "allowedValues": ["100", "1000", "10000", "100000", "200000"]
+      "allowedValues": [
+        "100",
+        "1000",
+        "10000",
+        "100000",
+        "200000"
+      ]
     },
     "maxNumberOfQueueMessages": {
       "type": "string",
@@ -95,7 +106,11 @@
       "metadata": {
         "description": "Broker system scaling: the maximum number of queue messages, in millions of messages"
       },
-      "allowedValues": ["100", "240", "3000"]
+      "allowedValues": [
+        "100",
+        "240",
+        "3000"
+      ]
     },
     "messageRoutingNodeVmSize": {
       "type": "string",
@@ -134,7 +149,15 @@
       "metadata": {
         "description": "Modified default, provisions a deicated data disk in event of disater recovery this can be attached to a new instance."
       },
-      "allowedValues": ["0", "8", "16", "32", "64", "128", "256"]
+      "allowedValues": [
+        "0",
+        "8",
+        "16",
+        "32",
+        "64",
+        "128",
+        "256"
+      ]
     },
     "brokerDockerImageReference": {
       "type": "string",
@@ -160,28 +183,28 @@
     },
     "existingVirtualNetworkName": {
       "type": "string",
-      "defaultValue": "ilgazurevnet",
+      "defaultValue": "",
       "metadata": {
         "description": "Optional: Only used if deploying into an existing virtual network and subnet. Specify the Existing Virtual Network Name together with the Existing Subnet Name, otherwise leave it at default blank."
       }
     },
     "existingSubnetName": {
       "type": "string",
-      "defaultValue": "AzureInfrastructure",
+      "defaultValue": "",
       "metadata": {
         "description": "Optional: Only used if deploying into an existing virtual network and subnet. Specify the Existing Virtual Network Name together with the Existing Subnet Name, otherwise leave it at default blank."
       }
     },
     "vnetAddressPrefix": {
       "type": "string",
-      "defaultValue": "10.20.100.0/22",
+      "defaultValue": "10.0.0.0/16",
       "metadata": {
         "description": "The virtual network's address range in CIDR notation where the PubSub+ event broker will be deployed."
       }
     },
     "subnetPrefix": {
       "type": "string",
-      "defaultValue": "10.20.103.0/24",
+      "defaultValue": "10.0.0.0/24",
       "metadata": {
         "description": "The subnet's address range in CIDR notation where the PubSub+ event broker will be deployed. It must be contained by the address space of the virtual network. The address range of a subnet which is in use can't be edited."
       }
@@ -195,7 +218,7 @@
     },
     "numberOfFaultDomains": {
       "type": "int",
-      "defaultValue": 2,
+      "defaultValue": 3,
       "metadata": {
         "description": "The number of fault domains to be used for the deployment. For the maximum number fault domains available to your location refer to https://github.com/MicrosoftDocs/azure-docs/blob/master/includes/managed-disks-common-fault-domain-region-list.md"
       }
@@ -247,12 +270,10 @@
     "nicName": "Nicd",
     "deploymentModelHighAvailability": { "numberOfNodes": 3 },
     "deploymentModelSingleNode": { "numberOfNodes": 1 },
-    "subnetRef": "[resourceId(parameters('virtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]",
+    "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]",
     "numberOfInstances": "[variables(concat('deploymentModel', parameters('deploymentModel'))).numberOfNodes]",
     "monitorNodeIndex": 2,
-    "lbName": "solace-ha-group-loadbalancer",
-    "lbSkuName": "Standard",
-    "lbSkuTier": "Regional",
+    "lbName" : "solace-ha-group-loadbalancer",
     "lbPoolName": "solace-ha-group",
     "lbPoolID": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', variables('lbName'), variables('lbPoolName'))]",
     "dataDisksChoices": {
@@ -280,10 +301,10 @@
           }
         }
       ],
-      "2": []
+      "2": [ ]
     },
-    "adminPasswordDir": "/mnt/resource/secrets",
-    "adminPasswordFile": "[concat(variables('adminPasswordDir'),'/solOSpasswd')]"
+    "adminPasswordDir" : "/mnt/resource/secrets",
+    "adminPasswordFile" : "[concat(variables('adminPasswordDir'),'/solOSpasswd')]"
   },
   "resources": [
     {
@@ -338,12 +359,6 @@
           "lbPoolName": {
             "value": "[variables('lbPoolName')]"
           },
-          "lbSkuName": {
-            "name": "[variables('lbSkuName')]"
-          },
-         "lbSkuTier": {
-            "name": "[variables('lbSkuTier')]"
-          },
           "subnetRef": {
             "value": "[variables('subnetRef')]"
           },
@@ -380,10 +395,6 @@
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "[concat(variables('publicIPAddressNameVM'), copyindex())]",
       "location": "[parameters('location')]",
-      "sku": {
-        "name": "[variables('lbSkuName')]",
-        "Tier": "[variables('lbSkuTier')]"
-      },
       "copy": {
         "name": "interfaceLoop",
         "count": "[variables('numberOfInstances')]"
@@ -403,7 +414,9 @@
       "location": "[parameters('location')]",
       "properties": {
         "addressSpace": {
-          "addressPrefixes": ["[parameters('vnetAddressPrefix')]"]
+          "addressPrefixes": [
+            "[parameters('vnetAddressPrefix')]"
+          ]
         },
         "subnets": [
           {
@@ -531,14 +544,14 @@
       "location": "[parameters('location')]",
       "sku": {
         "name": "Aligned"
-      },
+        },
       "properties": {
         "platformFaultDomainCount": "[variables('platformFaultDomainCount')]",
         "platformUpdateDomainCount": "[variables('platformUpdateDomainCount')]"
       }
     },
     {
-      "apiVersion": "2021-07-01",
+      "apiVersion":"2021-07-01",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[concat(parameters('dnsLabelForVmIp'), copyindex())]",
       "location": "[parameters('location')]",
@@ -661,3 +674,4 @@
     }
   ]
 }
+
