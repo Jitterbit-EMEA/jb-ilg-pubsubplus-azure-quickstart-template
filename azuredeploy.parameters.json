@@ -31,12 +31,6 @@
     },
     "deploymentModel": {
       "value": "HighAvailability"
-    },
-    "lbSkuName": {
-      "value": "Standard"
-    },
-    "lbSkuTier": {
-      "value": "Regional"
     }
   }
 }
