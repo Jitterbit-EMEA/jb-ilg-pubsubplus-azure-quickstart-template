@@ -74,6 +74,9 @@
       "apiVersion": "2020-04-01",
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "[parameters('publicIPAddressNameLB')]",
+      "sku": {
+        "name": "Standard"
+      },
       "location": "[parameters('location')]",
       "properties": {
         "publicIPAllocationMethod": "[parameters('publicIPAddressType')]",
@@ -87,8 +90,7 @@
       "type": "Microsoft.Network/loadBalancers",
       "name": "[parameters('lbName')]",
       "sku": {
-        "name": "[variables('lbSkuName')]",
-        "tier": "[variables('lbSkuTier')]"
+        "name": "Standard"
       },
       "location": "[parameters('location')]",
       "dependsOn": [
